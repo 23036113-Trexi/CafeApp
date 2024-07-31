@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/f7a50f4b83.js" crossorigin="anonymous"></script>
+    <title>Morning Brew</title>
+</head>
+<body>
+    <h4 style="margin-top: 10px; margin-bottom: 10px; margin-left: 5px;">Order Summary</h4>
+    <table class="table table-hover small text-center">
+        <thead>
+            <tr>
+                <th width="100" style="background-color: rgb(227, 180, 108);padding-top: 25px; color:white">Product Name</th>
+                <th width="100" style="background-color: rgb(227, 180, 108);padding-top: 25px;color:white">Product Image</th>
+                <th width="50" style="background-color: rgb(227, 180, 108);padding-top: 25px;color:white">Quantity</th>
+                <th width="50" style="background-color: rgb(227, 180, 108);padding-top: 25px;color:white">Price</th>
+                <th width="50" style="background-color: rgb(227, 180, 108);padding-top: 25px;color:white">Edit</th>
+                <th width="50" style="background-color: rgb(227, 180, 108);padding-top: 25px;color:white">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(let i=0; i < cart.length; i++) { %>
+                <tr>
+                    <td><a href="/product/<%= cart[i].productId %>">
+                            <%= cart[i].productName %>
+                        </a></td>
+                    <td><img src="../images/<%= cart[i].image %>" width="20%"></td>
+                    <td>
+                        <%= cart[i].quantity %>
+                    </td>
+                    <td>$<%= cart[i].price %>
+                    </td>
+                    <!-- Edit Link -->
+                    <td><a href="/editProduct/<%= cart[i].orderproductId %>">Edit</a></td>
+                    <!-- Delete Link -->
+                    <td><a href="/deleteProduct/<%= cart[i].orderproductId %>"
+                            onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
+                    </td>
+                </tr>
+                <% } %>
+        </tbody>
+    </table>
+
+    <div style="text-align: right;">
+        <a href="/"><button class="btn btn-warning" style="color: white;">Continue Browsing</button></a>
+                    <a href="/confirmOrder"><button id="confirmOrderBtn" class="btn btn-success">Confirm Order</button></a>
+                    
+    </div>
+
+    <!-- use of chatgpt here -->
+    <script>
+        const url = window.location.pathname;
+        const segments = url.split('/');
+        const orderId = segments[2];
+        const localCartId = localStorage.getItem('cartId');
+        if (localCartId === null) {
+            localStorage.setItem('cartId', orderId);
+        } 
+
+        // code this here myself as I want to remove cartid upon clicking 'confirm order' button so a new cardId will be assigned to the next cart session
+        document.getElementById('confirmOrderBtn').addEventListener('click', function() {
+            localStorage.removeItem('cartId');
+        });
+    </script>
+</body>
+</html>
